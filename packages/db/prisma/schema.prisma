@@ -33,7 +33,7 @@ model User {
   deleted_at      DateTime?
   // relations
   chats           Chat[]
-  loans           Loan[]
+  loans           Loan[] //array samjlo
   documents       Document[]
 }
 
