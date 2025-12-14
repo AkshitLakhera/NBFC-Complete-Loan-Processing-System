@@ -1,9 +1,12 @@
-//index.ts — Server Entry Point
+import dotenv from "dotenv";
+import { app } from "./app";
 
+dotenv.config();
 
+const PORT = Number(process.env.PORT) || 3001;
 
-//  This file:
+console.log("Starting server...");
 
-// Starts the server
-
-// Listens on a port
+app.listen(PORT, () => {
+  console.log(`API Server listening on port ${PORT}`);
+});

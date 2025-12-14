@@ -1,0 +1,9 @@
+{
+    "compilerOptions": {
+      "baseUrl": ".",
+      "paths": {
+       "@repo/db": ["packages/db/src/index.ts"]
+      }
+    }
+  }
+  

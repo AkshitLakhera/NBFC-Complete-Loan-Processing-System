@@ -1,11 +1,15 @@
-// app.ts — App Configuration (MOST IMPORTANT FILE)
+import express from "express";
+import cors from "cors";
+import chatRoutes from "./routes/chat.routes";
+import loanRoutes from "./routes/loan.routes";
+import documentRoutes from "./routes/document.routes";
 
-// 📄 apps/api/src/app.ts
+export const app = express();
 
-// This file:
+app.use(cors());
+app.use(express.json());
 
-// Creates express app
-
-// Adds middlewares
-
-// Connects routes
+// Register routes
+app.use("/chat", chatRoutes);
+app.use("/loan", loanRoutes);
+app.use("/documents", documentRoutes);

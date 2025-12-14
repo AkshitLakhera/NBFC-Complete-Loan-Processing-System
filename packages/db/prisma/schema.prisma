@@ -6,7 +6,7 @@
 
 generator client {
   provider = "prisma-client"
-  output   = "../generated/prisma"
+  output   = "./../generated/prisma"
 }
 
 datasource db {
@@ -33,7 +33,7 @@ model User {
   deleted_at      DateTime?
   // relations
   chats           Chat[]
-  loans           Loan[] //array samjlo
+  loans           Loan[] //array samjlop
   documents       Document[]
 }
 

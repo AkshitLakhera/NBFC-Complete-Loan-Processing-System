@@ -1,0 +1,17 @@
+{
+   //it should take values from root
+   "extends": "../../tsconfig.json",
+    "compilerOptions": {
+      "target": "ES2020",
+      "module": "CommonJS",
+      "moduleResolution": "Node",
+      //we extends that is why remove from here to remove warnings
+      // "rootDir": "src",
+      "outDir": "dist",
+      "esModuleInterop": true,
+      "strict": true,
+      "skipLibCheck": true
+    },
+    "include": ["src"]
+  }
+  
