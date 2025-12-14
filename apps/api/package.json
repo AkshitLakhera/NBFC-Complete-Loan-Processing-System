@@ -14,16 +14,21 @@
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
-    "@langchain/core": "^1.1.4",
+    "@langchain/core": "^1.1.5",
+    "@langchain/google-gauth": "^2.1.0",
+    "@langchain/google-genai": "^2.1.0",
     "@langchain/langgraph": "^1.0.4",
     "@repo/db": "*",
+    "cloudinary": "^2.8.0",
     "cors": "^2.8.5",
     "express": "^5.2.1",
+    "multer": "^2.0.2",
     "openai": "^6.10.0"
   },
   "devDependencies": {
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
+    "@types/multer": "^2.0.0",
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
     "typescript": "^5.9.2"

@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
-export const handlechat=(req:Request,res:Response)=>{
-    res.status(200).json({
-        message:"i  need to handle chat"
-    })
+import { chatService } from "../services/chat.chatService";
+export const handlechat=async (req:Request,res:Response)=>{
+    const {sessionId,message}=req.body;
+    const reply=await chatService.processMessage(sessionId,message);
+    res.json({reply});
 }
