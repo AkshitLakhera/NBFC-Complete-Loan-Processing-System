@@ -36,6 +36,6 @@
     "@types/multer": "^2.0.0",
     "@types/pdfkit": "^0.17.4",
     "ts-node": "^10.9.2",
-    "typescript": "^5.9.2"
+    "typescript": "^5.9.3"
   }
 }
