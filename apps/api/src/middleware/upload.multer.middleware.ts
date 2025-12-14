@@ -30,7 +30,6 @@ const fileFilter: multer.Options["fileFilter"] = (
     cb(new Error("Only image files are allowed"));
   }
 };
-
 export const upload = multer({
   storage,
   fileFilter,
