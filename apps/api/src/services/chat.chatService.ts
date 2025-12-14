@@ -1,4 +1,5 @@
 import prisma from "../prisma_client/client"
+import { processMessage } from "../agents/master.agent"
 
 export const chatService ={
     async createChatSession(){
@@ -37,7 +38,7 @@ export const chatService ={
         await this.saveUserMessage(sessionId,message);
         //let me call masteragent
         //master agent not created yet that is why showing error
-        const aiReply = await masterAgent.processMessage({
+        const aiReply = await processMessage({
             sessionId,
             message
           });
