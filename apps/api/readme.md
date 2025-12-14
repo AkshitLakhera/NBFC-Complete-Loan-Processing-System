@@ -1,4 +1,15 @@
-// for now we are these  three routes mentioned
-also in controllers: CONTROLLERS → Take request, send to service
-//SERVICES → REAL BUSINESS LOGIC
-//TOOLS → SPECIAL FUNCTIONS THAT AI CAN CALL
+# API Documentation
+
+## Architecture
+
+- **Routes**: Define API endpoints
+- **Controllers**: Take request, send to service
+- **Services**: Real business logic
+- **Tools**: Special functions that AI can call
+
+## Current Routes
+
+We currently have three main routes:
+- `/chat` - Chat session management
+- `/loan` - Loan processing
+- `/documents` - Document upload and management

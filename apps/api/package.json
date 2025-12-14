@@ -25,6 +25,7 @@
     "dotenv": "^17.2.3",
     "express": "^5.2.1",
     "openai": "^6.10.0",
+    "pdfkit": "^0.17.2",
     "pdf-parse": "^2.4.5",
     "twilio": "^5.10.7",
     "multer": "^2.0.2"
@@ -33,6 +34,7 @@
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
     "@types/multer": "^2.0.0",
+    "@types/pdfkit": "^0.17.4",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.2"
   }

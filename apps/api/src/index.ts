@@ -8,5 +8,5 @@ const PORT = Number(process.env.PORT) || 3001;
 console.log("Starting server...");
 
 app.listen(PORT, () => {
-  console.log(`Listening on port ${PORT}`);
+  console.log(`API Server listening on port ${PORT}`);
 });
