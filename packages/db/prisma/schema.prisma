@@ -22,6 +22,8 @@ datasource db {
 //USER MODEL
 model User {
   id              Int       @id @default(autoincrement())
+  name            String?
+  dob             String?
   email           String?   @unique
   phone           String?   @unique
   pan_number      String?
