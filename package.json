@@ -10,6 +10,8 @@
   },
   "devDependencies": {
     "prettier": "^3.7.4",
+    "prisma": "^7.1.0",
+    "tsx": "^4.21.0",
     "turbo": "^2.6.3",
     "typescript": "5.9.2"
   },
@@ -20,5 +22,8 @@
   "workspaces": [
     "apps/*",
     "packages/*"
-  ]
+  ],
+  "dependencies": {
+    "dotenv": "^17.2.3"
+  }
 }
