@@ -1,5 +1,5 @@
 import prisma from '../prisma_client/client';
-import { Prisma } from '@repo/db';
+import { Prisma } from '../prisma_client/client';
 
 /**
  * Underwriting core service for AI-based unsecured personal loan system.
