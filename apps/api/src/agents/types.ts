@@ -5,6 +5,7 @@ export type AgentIntent =
   | "UNKNOWN";
 
 export interface MasterAgentInput {
-  sessionId: Number;
+  sessionId: string;
   message: string;
+  loanId:number
 }

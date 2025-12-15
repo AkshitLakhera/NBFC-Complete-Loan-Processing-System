@@ -1,6 +1,9 @@
 import { ChatGoogle } from "@langchain/google-gauth";
 import { MasterAgentInput , AgentIntent } from "./types";
 import { Messages } from "openai/resources/chat/completions";
+import { salesAgent } from "./sale.agent";
+import { documentationAgent } from "./documnetation.agent";
+import { underwritingAgent } from "./underwriting.agent";
 const model = new ChatGoogle({
   model: "gemma-3-27b-it",
 });
@@ -9,7 +12,8 @@ const model = new ChatGoogle({
 //classifies intent and and  routes to correct agent
 export async function processMessage({
   sessionId,
-  message
+  message,
+  loanId,
 }: MasterAgentInput): Promise<string>{
   const intent=await checkIntent(message);
   switch (intent) {
@@ -20,7 +24,7 @@ export async function processMessage({
       return await documentationAgent(message);
 
     case "UNDERWRITING":
-      return await underwritingAgent(message);
+      return await underwritingAgent(message,loanId);
 
     default:
       return "Sorry, I couldn't understand your request. Can you rephrase?";
