@@ -2,7 +2,7 @@ import prisma from "../prisma_client/client"
 import { processMessage } from "../agents/master.agent"
 
 export const chatService ={
-    async createChatSession(){
+    async  createChatSession(){
        return prisma.chat.create({
         data:{
         created_at: new Date(),

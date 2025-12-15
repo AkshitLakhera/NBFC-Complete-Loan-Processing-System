@@ -21,7 +21,7 @@ interface SaveGeneratedDocumentInput {
 export const documentService ={
   
  async  saveUploadedDocument(input:SaveDocumentInput) {
-//     It does NOT upload file ❌
+//     It does NOT upload file 
 //     It ONLY saves record in DB
 //     It saves:
 //     document type (PAN)
@@ -29,7 +29,7 @@ export const documentService ={
 //     userId
 //     loanId
 //     status = UPLOADED
-//     👉 Meaning:
+//      Meaning:
 //  “This document exists, and this is where it is stored.”
 
 
@@ -55,7 +55,7 @@ export const documentService ={
 // Does NOT upload to Cloudinary
 // Does NOT save to database
   // 1. Fetch loan + user + underwriting
-  // 1️⃣ Fetch loan + underwriting
+  //  Fetch loan + underwriting
   const loan = await prisma.loan.findUnique({
     where: { id: loanId },
     include: {
@@ -64,7 +64,7 @@ export const documentService ={
     },
   });
 
-  // 2️⃣ Approval check (MANDATORY)
+  //  Approval check (MANDATORY)
   if (!loan) {
     throw new Error("Loan not found");
   }
@@ -73,7 +73,7 @@ export const documentService ={
     throw new Error("Loan not approved");
   }
 
-  // 3️⃣ Prepare local file path
+  //  Prepare local file path
   const tempDir = path.join(process.cwd(), "tmp");
   fs.mkdirSync(tempDir, { recursive: true });
 
@@ -82,7 +82,7 @@ export const documentService ={
     `loan_${loan.id}_sanction_letter.pdf`
   );
 
-  // 4️⃣ Generate PDF
+  // Generate PDF
   const doc = new PDFDocument({ size: "A4", margin: 50 });
   doc.pipe(fs.createWriteStream(filePath));
 
@@ -112,7 +112,7 @@ export const documentService ={
 
   doc.end();
 
-  // 5️⃣ Return local file path ONLY
+  //  Return local file path ONLY
   return filePath;
 }
 ,
@@ -127,7 +127,7 @@ export const documentService ={
 
   const { type, filePath, userId, loanId } = input;
 
-  // 1️⃣ Upload PDF to Cloudinary
+  // Upload PDF to Cloudinary
   const cloudinaryUrl = await uploadImage(filePath);
    // 2. Check if upload was successful
   if (!cloudinaryUrl) {
@@ -151,7 +151,7 @@ export const documentService ={
     status = "FAILED";
   }
 
-  // 2️⃣ Save document metadata
+  //  Save document metadata
   const document = await prisma.document.create({
     data: {
       type,

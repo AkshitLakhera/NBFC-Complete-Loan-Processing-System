@@ -1,8 +1,5 @@
 import { client as prisma } from "@repo/db";
 
-/* ----------------------------------
-   Loan status constants
----------------------------------- */
 export const LoanStatus = {
   INITIATED: "INITIATED",
   KYC_PENDING: "KYC_PENDING",
@@ -17,9 +14,6 @@ export const LoanStatus = {
 export type LoanStatusType =
   (typeof LoanStatus)[keyof typeof LoanStatus];
 
-/* ----------------------------------
-   1. Create Loan
----------------------------------- */
 export async function createLoan(input: {
   userId: number;
   chatId?: number;
@@ -39,9 +33,7 @@ export async function createLoan(input: {
   });
 }
 
-/* ----------------------------------
-   2. Update Loan Status
----------------------------------- */
+
 export async function updateLoanStatus(
   loanId: number,
   status: LoanStatusType
@@ -52,9 +44,7 @@ export async function updateLoanStatus(
   });
 }
 
-/* ----------------------------------
-   3. Get Active Loan Status (Chatbot)
----------------------------------- */
+
 export async function getLoanStatus(userId: number) {
   const loan = await prisma.loan.findFirst({
     where: {
@@ -78,9 +68,7 @@ export async function getLoanStatus(userId: number) {
   };
 }
 
-/* ----------------------------------
-   4. Check Active Loan
----------------------------------- */
+
 export async function hasActiveLoan(userId: number): Promise<boolean> {
   const count = await prisma.loan.count({
     where: {
@@ -93,9 +81,7 @@ export async function hasActiveLoan(userId: number): Promise<boolean> {
   return count > 0;
 }
 
-/* ----------------------------------
-   5. Loan Lifecycle Helpers
----------------------------------- */
+
 export const markKycPending = (loanId: number) =>
   updateLoanStatus(loanId, LoanStatus.KYC_PENDING);
 
@@ -117,9 +103,6 @@ export const disburseLoan = (loanId: number) =>
 export const closeLoan = (loanId: number) =>
   updateLoanStatus(loanId, LoanStatus.CLOSED);
 
-/* ----------------------------------
-   6. Fetch Loan With Full Context
----------------------------------- */
 export async function getLoanWithDetails(loanId: number) {
   return prisma.loan.findUnique({
     where: { id: loanId },
