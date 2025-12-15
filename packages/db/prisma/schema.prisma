@@ -109,17 +109,29 @@ model Loan {
 }
 
 
-  //underwriting agent
-  //what he will do i am yet to think
+  // Underwriting decision record
   model UnderwritingResult {
-  id            Int      @id @default(autoincrement())
-  approved      Boolean
-  score         Float?
-  reason        Json?
-  manual_override Boolean @default(false)
-  created_at    DateTime @default(now())
-  loanId        Int      @unique
-  loan          Loan     @relation(fields: [loanId], references: [id])
+  id                Int      @id @default(autoincrement())
+  
+  // Decision
+  approved          Boolean
+  rejection_reason  String?
+  
+  // Metrics
+  foir              Float?
+  credit_score      Int?     // External Bureau score if available
+  internal_score    Float?   // Computed internal score
+  
+  // Data Snapshot
+  metadata          Json?    // detailed input snapshot and logic trace
+  
+  manual_override   Boolean  @default(false)
+  
+  created_at        DateTime @default(now())
+  updated_at        DateTime @updatedAt
+  
+  loanId            Int      @unique
+  loan              Loan     @relation(fields: [loanId], references: [id])
 }
 //admin schema is pending
 //will make enums to make stricter
