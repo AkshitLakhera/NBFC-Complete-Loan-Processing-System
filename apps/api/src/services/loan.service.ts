@@ -1,4 +1,4 @@
-import prisma from "../prisma_client/client";
+import {prisma} from "../prisma_client/client";
 export const LoanStatus = {
   INITIATED: "INITIATED",
   KYC_PENDING: "KYC_PENDING",

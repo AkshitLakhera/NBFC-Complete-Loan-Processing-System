@@ -4,7 +4,7 @@ import { salesAgent } from "./sale.agent";
 import { documentationAgent } from "./documnetation.agent";
 import { underwritingAgent } from "./underwriting.agent";
 
-import { verifyPAN, verifyAdhaar } from "../services/verification.service";
+import { verifyPAN, verifyAdhaar ,verifySalarySlip,verifyBankStatement} from "../services/verification.service";
 import { getDocumentFromDB } from "../services/verification.service";
 import { documentService } from "../services/document.documentService";
 const model = new ChatGoogle({
@@ -12,8 +12,7 @@ const model = new ChatGoogle({
   temperature: 0.2,
 });
 
-export async function processMessage({
-  sessionId,
+export async function processMessagebyagent({
   message,
   loanId,
 }: MasterAgentInput): Promise<string> {
@@ -40,11 +39,21 @@ export async function processMessage({
       }
       const panUploaded = await safeDocCheck(loanId, "PAN");
       const aadhaarUploaded = await safeDocCheck(loanId, "AADHAAR");
+      const salarySlipUploaded = await safeDocCheck(loanId, "SALARY_SLIP"); // NEW
+     const bankStatementUploaded = await safeDocCheck(loanId, "BANK_STATEMENT")
 
       if (panUploaded && aadhaarUploaded) {
         // Run actual tools (NO LLM!)
         await verifyPAN(loanId);
         await verifyAdhaar(loanId);
+        if (salarySlipUploaded) {
+          await verifySalarySlip(loanId);
+        }
+  
+        if (bankStatementUploaded) {
+          await verifyBankStatement(loanId);
+        }
+        
         return "Documents verified successfully. Proceeding to underwriting.";
       }
       return "Some documents are still missing. Please upload PAN and Aadhaar.";

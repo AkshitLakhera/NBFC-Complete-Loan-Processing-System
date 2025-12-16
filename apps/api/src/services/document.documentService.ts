@@ -1,4 +1,4 @@
-import prisma from "../prisma_client/client";
+import {prisma} from "../prisma_client/client";
 import PDFDocument from "pdfkit";
 import path from "path";
 import fs from "fs";

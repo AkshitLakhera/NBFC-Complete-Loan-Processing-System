@@ -13,6 +13,6 @@
       "skipLibCheck": true,
       "types": ["node"]
     },
-    "include": ["src", "../../packages/db/tests"]
+    "include": ["src/index.ts"]
   }
   

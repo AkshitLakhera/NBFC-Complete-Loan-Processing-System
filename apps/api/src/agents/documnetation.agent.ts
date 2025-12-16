@@ -14,6 +14,8 @@ Your responsibilities:
   1. PAN image (optional)
   2. Aadhaar image (optional)
   3. Salary slip (mandatory)
+  4. Bank Statement (optional)
+
 - Explain how to upload if needed.
 - Confirm when upload is completed.
 - Once ALL required documents are uploaded, reply EXACTLY:

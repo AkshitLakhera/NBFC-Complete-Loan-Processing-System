@@ -1,31 +1,42 @@
-import prisma from "../prisma_client/client"
-import { processMessage } from "../agents/master.agent"
+import { prisma} from "../prisma_client/client"
+import { processMessagebyagent } from "../agents/master.agent"
+import crypto from "crypto";
+import { error } from "console";
+
 
 export const chatService ={
     async  createChatSession(){
        return prisma.chat.create({
         data:{
-        created_at: new Date(),
-        last_active_at: new Date(),
-        session_token: crypto.randomUUID()
+         session_token: crypto.randomUUID(),
         }
        })
+      
+
     },
 
-    async saveUserMessage(sessionId:number,message:string){
+    async saveUserMessage(session_token:string,message:string){
+      const chat = await prisma.chat.findUnique({
+        where: { session_token: session_token },
+      });
+      if(!chat)return;
      return prisma.chatMessage.create({
         data:{
-        chatId: sessionId,
+        chatId: chat?.id,
         sender: "user",
         content: message,
         created_at: new Date()
         }
      })
     },
-    async saveAgentMessage(sessionId: number, message: string) {
+    async saveAgentMessage(session_token: string, message: string) {
+      const chat = await prisma.chat.findUnique({
+        where: { session_token: session_token },
+      });
+      if(!chat)return;
         return prisma.chatMessage.create({
           data: {
-            chatId: sessionId,
+            chatId: chat?.id,
             sender: "agent",
             content: message,
             created_at: new Date()
@@ -33,17 +44,25 @@ export const chatService ={
         });
       },
 
-      async processMessage(sessionId: number, message: string) {
+      async processMessage(session_token: string, message: string) {
         //save usermessage
-        await this.saveUserMessage(sessionId,message);
+        await this.saveUserMessage(session_token,message);
+        const chat = await prisma.chat.findUnique({
+          where: { session_token },
+          include: { loan: true },
+        });
+        if (!chat) {
+          throw new Error("Chat session not found");
+        }
+        const loanId = chat.loan?.id;
         //let me call masteragent
         //master agent not created yet that is why showing error
-        const aiReply = await processMessage({
-            sessionId,
-            message
+        const aiReply = await processMessagebyagent({
+            message,
+            loanId
           });
           //save that reply
-          await this.saveAgentMessage(sessionId,aiReply);
+          await this.saveAgentMessage(session_token,aiReply);
           return aiReply;
       }
 

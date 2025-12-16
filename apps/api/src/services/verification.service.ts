@@ -1,4 +1,4 @@
-import { client as prisma } from "@repo/db";
+import {prisma} from "../prisma_client/client";
 import axios from "axios";
 import sgMail from "@sendgrid/mail";
 //libraries installed:
