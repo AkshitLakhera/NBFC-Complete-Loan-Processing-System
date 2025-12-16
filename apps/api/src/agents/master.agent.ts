@@ -11,7 +11,7 @@ import { documentService } from "../services/document.documentService";
 import { createLoan ,getLoanStatus } from "../services/loan.service";
 const model = new ChatGoogleGenerativeAI({
   apiKey: process.env.GEMINI_API_KEY!, // from AI Studio
-  model: "gemini-1.5-flash",
+  model: "gemini-1.0-pro",
   temperature: 0.2,
   maxRetries: 0, 
 
@@ -23,11 +23,11 @@ export async function processMessagebyagent({
 }: MasterAgentInput): Promise<string> {
 
 
+  
+  const intent =  detectIntent(message);
   if (!userId) {
     return "User session not initialized.";
   }
-  const intent =  detectIntent(message);
-
   //sales
   if (intent === "SALES") {
   let activeLoan = await getLoanStatus(userId);

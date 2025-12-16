@@ -5,15 +5,18 @@ import { error } from "console";
 
 
 export const chatService ={
-    async  createChatSession(){
-       return prisma.chat.create({
-        data:{
-         session_token: crypto.randomUUID(),
-        }
-       })
-      
-
-    },
+  async createChatSession() {
+    const user = await prisma.user.create({
+      data: {},
+    });
+    return prisma.chat.create({
+      data: {
+        session_token: crypto.randomUUID(),
+        userId: user.id,
+      },
+    });
+  }
+  ,
 
     async saveUserMessage(session_token:string,message:string){
       const chat = await prisma.chat.findUnique({
@@ -55,6 +58,7 @@ export const chatService ={
           throw new Error("Chat session not found");
         }
         const loanId = chat.loan?.id;
+        console.log(`the userid is ${chat?.user?.id}`);
         //let me call masteragent
         //master agent not created yet that is why showing error
         const aiReply = await processMessagebyagent({

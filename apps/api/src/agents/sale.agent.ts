@@ -3,7 +3,7 @@ import { getLoanWithDetails, updateLoanFields } from "../services/loan.service";
 
 const model = new ChatGoogleGenerativeAI({
   apiKey: process.env.GEMINI_API_KEY!, // from AI Studio
-  model: "gemini-1.5-flash",
+  model: "gemini-1.0-pro",
   temperature: 0.2,
   maxRetries: 0, 
 
