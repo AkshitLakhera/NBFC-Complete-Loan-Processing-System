@@ -22,7 +22,7 @@ export async function processMessagebyagent({
 
   if (!userId) return "User session not initialized.";
 
-  // 1️⃣ No loan → start SALES
+  //  No loan → start SALES
   if (!loanId) {
     const loan = await createLoan({
       userId,
@@ -37,7 +37,7 @@ export async function processMessagebyagent({
 
   const loan = await getLoanWithDetails(loanId);
 
-  // 2️⃣ SALES
+  //  SALES
   if (loan.status === "INITIATED") {
     const reply = await salesAgent(message, loanId);
 
@@ -49,12 +49,12 @@ export async function processMessagebyagent({
     return reply;
   }
 
-  // 3️⃣ DOCUMENTS
+  //  DOCUMENTS
   if (loan.status === "KYC_PENDING") {
     return documentationAgent(message);
   }
 
-  // 4️⃣ UNDERWRITING
+  //  UNDERWRITING
   if (loan.status === "VERIFIED") {
     const reply = await underwritingAgent(message, loanId);
 
