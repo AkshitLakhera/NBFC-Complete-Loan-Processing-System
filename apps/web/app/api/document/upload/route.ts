@@ -1,7 +1,7 @@
 export const runtime = 'nodejs';
-import { NextResponse } from 'next/server';
+import {NextRequest, NextResponse} from 'next/server';
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   console.log("we  are inside post request for upload")
   try {
     const formData = await req.formData();
@@ -31,7 +31,7 @@ export async function POST(req: Request) {
     backendFormData.append('loanId', loanId);
     backendFormData.append('type', type || 'DOCUMENT');
 
-    const response = await fetch('http://localhost:3001/documents/upload', {
+    const response = await fetch(`${process.env.Db_url}/documents/upload`, {
       method: 'POST',
       body: backendFormData,
     });
