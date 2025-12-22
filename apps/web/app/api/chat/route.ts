@@ -12,7 +12,7 @@ export async function POST(req: Request) {
       );
     }
 
-    const response = await axios.post('http://localhost:3001/chat/message', {
+    const response = await axios.post('http://localhost:3002/chat/message', {
       sessionId,
       message
     });

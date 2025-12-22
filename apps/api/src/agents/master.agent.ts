@@ -21,54 +21,55 @@ export async function processMessagebyagent({
 
   const loan = await getLoanWithDetails(loanId);
   if (!loan) return "Loan not found.";
+  
 
- //testing
-  if (loan.status === "INITIATED") {
-    console.log("Sales agent started");
 
-    const reply = await salesAgent(message, loanId);
+  // if (loan.status === "INITIATED") {
+  //   console.log("Sales agent started");
 
-    if (reply === "READY_FOR_VERIFICATION") {
-      await updateLoanStatus(loanId, "KYC_PENDING");
-      return "Please upload PAN, Aadhaar and Salary Slip.";
-    }
+  //   const reply = await salesAgent(message, loanId);
 
-    return reply;
-  }
-  if (loan.status === "KYC_PENDING") {
-    console.log("Documentation stage");
+  //   if (reply === "READY_FOR_VERIFICATION") {
+  //     await updateLoanStatus(loanId, "KYC_PENDING");
+  //     return "Please upload PAN, Aadhaar and Salary Slip.";
+  //   }
 
-    if (PROTOTYPE_MODE) {
-      console.log("Prototype mode: assuming documents uploaded");
+  //   return reply;
+  // }
+  // if (loan.status === "KYC_PENDING") {
+  //   console.log("Documentation stage");
 
-      await updateLoanStatus(loanId, "VERIFIED");
+  //   if (PROTOTYPE_MODE) {
+  //     console.log("Prototype mode: assuming documents uploaded");
 
-      return "Documents uploaded successfully. Loan is under review.";
-    }
-    const reply = await documentationAgent(loanId);
-    return reply;
-  }
-  if (loan.status === "VERIFIED") {
-    console.log("Underwriting started");
+  //     await updateLoanStatus(loanId, "VERIFIED");
 
-    const result = await processLoanUnderwriting(loanId);
+  //     return "Documents uploaded successfully. Loan is under review.";
+  //   }
+  //   const reply = await documentationAgent(loanId);
+  //   return reply;
+  // }
+  // if (loan.status === "VERIFIED") {
+  //   console.log("Underwriting started");
 
-    if (result.approved) {
-      await updateLoanStatus(loanId, "APPROVED");
-      return "Congratulations! Your loan has been approved.";
-    } else {
-      await updateLoanStatus(loanId, "REJECTED");
-      return `Loan rejected: ${result.rejectionReason}`;
-    }
-  }
-  if (loan.status === "APPROVED") {
-    console.log("Generating sanction letter");
+  //   const result = await processLoanUnderwriting(loanId);
 
-    const filePath = await documentService.generateSanctionLetter(loanId);
+  //   if (result.approved) {
+  //     await updateLoanStatus(loanId, "APPROVED");
+  //     return "Congratulations! Your loan has been approved.";
+  //   } else {
+  //     await updateLoanStatus(loanId, "REJECTED");
+  //     return `Loan rejected: ${result.rejectionReason}`;
+  //   }
+  // }
+  // if (loan.status === "APPROVED") {
+  //   console.log("Generating sanction letter");
 
-    return `Your loan is approved. Sanction letter generated: ${filePath}`;
-  }
-  return "Your loan is being processed.";
+  //   const filePath = await documentService.generateSanctionLetter(loanId);
+
+  //   return `Your loan is approved. Sanction letter generated: ${filePath}`;
+  // }
+  // return "Your loan is being processed.";
 }
 
 

@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 
 export async function POST() {
   try {
-    const response = await axios.post('http://localhost:3001/chat/start');
+    const response = await axios.post('http://localhost:3002/chat/start');
     return NextResponse.json({ 
       sessionId: response.data.sessionId,
       userId: response.data.userId // Include userId if backend returns it

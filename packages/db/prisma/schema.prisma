@@ -22,6 +22,43 @@ datasource db {
 //4-)document belong t user and loan
 //5-)a verification result belong to loan
 
+//I will be making states as enum
+enum LoanStatus {
+  INITIATED
+  DETAILS_IN_PROGRESS
+  DETAILS_COLLECTED
+  KYC_IN_PROGRESS
+  KYC_VERIFICATION
+  VERIFIED
+  UNDERWRITING
+  APPROVED
+  REJECTED
+}
+
+enum KycStep {
+  PAN_PENDING
+  AADHAAR_PENDING
+  SALARY_SLIP_PENDING
+  REUPLOAD_REQUIRED
+  KYC_COMPLETE
+}
+
+enum DocumentStatus {
+  UPLOADED
+  VERIFIED
+  FAILED
+}
+
+
+enum VerificationStatus {
+  PENDING
+  PASSED
+  FAILED
+}
+
+
+
+
 //USER MODEL
 model User {
   id              Int       @id @default(autoincrement())
@@ -73,11 +110,12 @@ model ChatMessage {
 
 model Loan {
   id                 Int       @id @default(autoincrement())
-  status             String
-  type               String
+  status             LoanStatus
+  loan_type               String
+  kyc_step           KycStep?
   amount             Int?
   tenure_months      Int?
-  monthlyincome      Int? //added
+  monthly_income      Int? //added
   created_at         DateTime  @default(now())
   updated_at         DateTime  @updatedAt
   userId             Int
@@ -94,7 +132,7 @@ model Loan {
   id                Int       @id @default(autoincrement())
   type              String
   filepath          String
-  status            String
+  status            DocumentStatus
   created_at        DateTime @default(now())
   userId            Int
   user              User @relation(fields: [userId], references: [id])
@@ -106,7 +144,7 @@ model Loan {
  model VerificationResult {
   id         Int      @id @default(autoincrement())
   type       String
-  status     String
+  status     VerificationStatus
   result     Json
   created_at DateTime @default(now())
   loanId     Int
@@ -117,24 +155,15 @@ model Loan {
   // Underwriting decision record
   model UnderwritingResult {
   id                Int      @id @default(autoincrement())
-  
-  // Decision
-  approved          Boolean
+   approved          Boolean
   rejection_reason  String?
-  
-  // Metrics
   foir              Float?
   credit_score      Int?     // External Bureau score if available
   internal_score    Float?   // Computed internal score
-  
-  // Data Snapshot
   metadata          Json?    // detailed input snapshot and logic trace
-  
   manual_override   Boolean  @default(false)
-  
   created_at        DateTime @default(now())
   updated_at        DateTime @updatedAt
-  
   loanId            Int      @unique
   loan              Loan     @relation(fields: [loanId], references: [id])
 }
