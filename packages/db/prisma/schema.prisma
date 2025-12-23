@@ -75,7 +75,7 @@ model User {
   deleted_at      DateTime?
   // relations
   chats           Chat[]
-  loans           Loan[] //array samjlop
+  loans           Loan[] //array samjlo
   documents       Document[]
 }
 

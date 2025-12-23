@@ -19,11 +19,11 @@ export const chatService ={
       data: {
         userId: user.id,
         chatId: chat.id,
-        status: "INITIATED",
-        type: "PERSONAL_LOAN",
+        loan_type :"Personal_loan",
+        status: "INITIATED", 
         amount: 0,
         tenure_months: 0,
-        monthlyincome: 0,
+        monthly_income: 0,
       },
     });
     return {

@@ -6,8 +6,8 @@ import {
 } from "../services/loan.service";
 import { processLoanUnderwriting } from "../services/underwriting.service";
 import { documentService } from "../services/document.documentService";
-
-const PROTOTYPE_MODE = true;
+import { LoanStatus } from "@prisma/client";
+import { handleDetailsInput ,type DetailsResult } from "../services/handledetailsinput";
 
 export async function processMessagebyagent({
   message,
@@ -17,10 +17,53 @@ export async function processMessagebyagent({
   message: string;
   loanId: number;
   userId: number;
-}): Promise<string> {
+}): Promise<string>  {
 
-  const loan = await getLoanWithDetails(loanId);
+  
+  let loan = await getLoanWithDetails(loanId);
   if (!loan) return "Loan not found.";
+  if(loan.status==LoanStatus.INITIATED){
+    //then sent it to detail in progres state 
+    await updateLoanStatus(loanId,LoanStatus.DETAILS_IN_PROGRESS);
+    //now lets ask user info
+  }
+  if(loan.status==LoanStatus.DETAILS_IN_PROGRESS){
+    const subState =
+    !loan.amount
+      ? "AMOUNT_PENDING"
+      : !loan.tenure_months
+      ? "TENURE_PENDING"
+      : !loan.monthly_income
+      ? "INCOME_PENDING"
+      : null;
+      if(!subState){
+        await updateLoanStatus(loanId,LoanStatus.DETAILS_COLLECTED);
+        return "Details completed. Moving to KYC.";
+      }
+      //otherwise we need to validate and store
+      const result = await handleDetailsInput(loanId, subState, message); 
+     //if false came then i need to show error and if correct then move to next state 
+     //as things go one by one na
+     if(!result.success){
+      return result.error;
+     }  
+     loan=await getLoanWithDetails(loanId);
+     const nextSubState =
+    !loan.amount
+      ? "AMOUNT_PENDING"
+      : !loan.tenure_months
+      ? "TENURE_PENDING"
+      : !loan.monthly_income
+      ? "INCOME_PENDING"
+      : null;
+      if(!nextSubState){
+        await updateLoanStatus(loanId,LoanStatus.DETAILS_COLLECTED);
+      }
+      //need to make it ask questions
+     return salesAgent(subState);
+
+     //kyc thing is pending
+  }
   
 
 

@@ -1,117 +1,17 @@
 import {prisma} from "../prisma_client/client";
+import { LoanStatus } from "@prisma/client";
 
-export const LoanStatus = {
-  INITIATED: "INITIATED",
-  KYC_PENDING: "KYC_PENDING",
-  VERIFIED: "VERIFIED",
-  APPROVED: "APPROVED",
-  REJECTED: "REJECTED",
-} as const;
-
-export async function getLoanWithDetails(loanId: number) {
-  return prisma.loan.findUnique({
-    where: { id: loanId },
-    include: { user: true },
-  });
-}
-
-export async function updateLoanFields(
+//We generally import  enum types from the prisma as it is a good practice
+  //to update loan status
+export async function updateLoanStatus(
   loanId: number,
-  fields: Partial<{
-    amount: number;
-    tenure_months: number;
-    monthlyincome: number;
-  }>
+  status: LoanStatus
 ) {
-  return prisma.loan.update({
-    where: { id: loanId },
-    data: fields,
-  });
-}
-
-export async function updateUserName(userId: number, name: string) {
-  return prisma.user.update({
-    where: { id: userId },
-    data: { name },
-  });
-}
-
-export async function updateLoanStatus(loanId: number, status: string) {
   return prisma.loan.update({
     where: { id: loanId },
     data: { status },
   });
 }
-
-
-
-//sagar code : I am commenting this for mvp 
-//Will look into this later
-// export const LoanStatus = {
-//   INITIATED: "INITIATED",
-//   KYC_PENDING: "KYC_PENDING",
-//   VERIFIED: "VERIFIED",
-//   UNDERWRITING: "UNDERWRITING",
-//   APPROVED: "APPROVED",
-//   REJECTED: "REJECTED",
-//   DISBURSED: "DISBURSED",
-//   CLOSED: "CLOSED",
-// } as const;
-
-// export type LoanStatusType =
-//   (typeof LoanStatus)[keyof typeof LoanStatus];
-
-// // export async function createLoan(input: {
-// //   userId: number;
-// //   chatId?: number;
-// //   type: string;
-// //   amount: number;
-// //   tenureMonths: number;
-// //   monthlyincome:number;
-// // }) {
-// //   return prisma.loan.create({
-// //     data: {
-// //       userId: input.userId,
-// //       chatId: input.chatId,
-// //       type: input.type,
-// //       amount: input.amount,
-// //       tenure_months: input.tenureMonths,
-// //       status: LoanStatus.INITIATED,
-// //       monthlyincome:input.monthlyincome
-// //     },
-// //   });
-// // }
-// export async function createLoan(input: {
-//   userId: number;
-//   chatId?: number;
-//   type?: string;
-//   amount?: number;
-//   tenureMonths?: number;
-//   monthlyincome?: number;
-// }) {
-//   return prisma.loan.create({
-//     data: {
-//       userId: input.userId,
-//       chatId: input.chatId,
-//       type: input.type ?? "PERSONAL_LOAN",
-//       status: LoanStatus.INITIATED,
-//       amount: null,
-//       tenure_months: null,
-//       monthlyincome: null,
-//     },
-//   });
-// }
-
-
-// export async function updateLoanStatus(
-//   loanId: number,
-//   status: LoanStatusType
-// ) {
-//   return prisma.loan.update({
-//     where: { id: loanId },
-//     data: { status },
-//   });
-// }
 
 
 // export async function getLoanStatus(userId: number) {
@@ -172,43 +72,43 @@ export async function updateLoanStatus(loanId: number, status: string) {
 // export const closeLoan = (loanId: number) =>
 //   updateLoanStatus(loanId, LoanStatus.CLOSED);
 
-// export async function getLoanWithDetails(loanId: number) {
-//   const loan = await prisma.loan.findUnique({
-//     where: { id: loanId },
-//     include: {
-//       user: true,
-//       documents: true,
-//       verificationResults: true,
-//       underwriting: true,
-//       chat: true,
-//     },
-//   });
-// //it should return error
-//   if (!loan) {
-//     throw new Error(`Loan not found: ${loanId}`);
-//   }
+export async function getLoanWithDetails(loanId: number) {
+  const loan = await prisma.loan.findUnique({
+    where: { id: loanId },
+    include: {
+      user: true,
+      documents: true,
+      verificationResults: true,
+      underwriting: true,
+      chat: true,
+    },
+  });
+//it should return error
+  if (!loan) {
+    throw new Error(`Loan not found: ${loanId}`);
+  }
 
-//   return loan;
-// }
+  return loan;
+}
 
 
-// export async function getUserLoans(userId: number) {
-//   return prisma.loan.findMany({
-//     where: { userId },
-//     orderBy: { created_at: "desc" },
-//   });
-// }
-// //to update loan fields
-// export async function updateLoanFields(
-//   loanId: number,
-//   data: Partial<{
-//     monthlyincome: number;
-//     amount: number;
-//     tenure_months: number;
-//   }>
-// ) {
-//   return prisma.loan.update({
-//     where: { id: loanId },
-//     data,
-//   });
-// }
+export async function getUserLoans(userId: number) {
+  return prisma.loan.findMany({
+    where: { userId },
+    orderBy: { created_at: "desc" },
+  });
+}
+//to update loan fields
+export async function updateLoanFields(
+  loanId: number,
+  data: Partial<{
+    monthlyincome: number;
+    amount: number;
+    tenure_months: number;
+  }>
+) {
+  return prisma.loan.update({
+    where: { id: loanId },
+    data,
+  });
+}
