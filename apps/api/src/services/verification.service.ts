@@ -20,6 +20,69 @@ import fs from "fs";
 import csv from "csv-parser";
 const pdfParse = require("pdf-parse");
 
+
+//combined function
+
+export  async function verifydocuments(loanId:number){
+
+    const panresult =await verifyPAN(loanId);
+    const adhaarresult =  await verifyAdhaar(loanId);
+    const salaryslipresult = verifySalarySlip(loanId);
+    
+    const results=[panresult,adhaarresult,salaryslipresult];
+
+    const hasRejected = results.some(r => r.status === "REJECTED");
+    const hasReploaded=results.some(r=> r.status ==="REUPLOAD_REQUIRED");
+
+
+    if(hasRejected){
+        return {
+            success:false,
+            nextAction: "REJECT",
+            message: "Verification failed. Your application has been rejected.",
+      results,
+        };
+    }
+
+     if(hasReploaded){
+        return {
+            success: false,
+            nextAction: "REUPLOAD_REQUIRED",
+            message: "Some documents could not be verified. Please re-upload them.",
+            results,
+          };
+     }
+     return{
+        success:true,
+        nextAction: "UNDERWRITING",
+        message: "All documents verified successfully.",
+        results,
+     }
+    
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //common functions:
 export async function getDocumentFromDB(loanId:number, type: string){
     const doc = await prisma.document.findFirst({

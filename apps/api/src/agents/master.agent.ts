@@ -10,6 +10,7 @@ import { LoanStatus,KycStep } from "@prisma/client";
 import { getResponse } from "../services/getResponse";
 import { handleDetailsInput ,type DetailsResult } from "../services/handledetailsinput";
 import { prisma } from "../prisma_client/client";
+import { verficationStatus ,verifydocuments} from "../services/verification.service";
 export async function processMessagebyagent({
   message,
   loanId,
@@ -96,6 +97,8 @@ export async function processMessagebyagent({
             });
            case KycStep.KYC_COMPLETE:
               await updateLoanStatus(loanId, LoanStatus.KYC_VERIFICATION);
+              //directly call verification services
+              const verificationresponse=await verifydocuments(loanId);
               return "Documents received. Verification in progress."; 
             }
     }
