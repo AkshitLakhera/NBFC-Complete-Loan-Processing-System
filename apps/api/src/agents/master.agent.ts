@@ -10,7 +10,6 @@ import { LoanStatus,KycStep } from "@prisma/client";
 import { getResponse } from "../services/getResponse";
 import { handleDetailsInput ,type DetailsResult } from "../services/handledetailsinput";
 import { prisma } from "../prisma_client/client";
-import {}
 export async function processMessagebyagent({
   message,
   loanId,

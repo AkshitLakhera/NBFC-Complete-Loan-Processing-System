@@ -1,10 +1,8 @@
-import {prisma} from "../prisma_client/client";
+import {prisma, LoanStatus,KycStep} from "../prisma_client/client";
 import PDFDocument from "pdfkit";
 import path from "path";
 import fs from "fs";
 import { uploadImage } from "./document.uploadDocument";
-
-
 interface SaveDocumentInput {
   type: string;
   filepath: string;
@@ -17,6 +15,8 @@ interface SaveGeneratedDocumentInput {
   userId: number;
   loanId: number;
 }
+
+
 
 export const documentService ={
   
@@ -35,7 +35,7 @@ export const documentService ={
 
   const { type, filepath, userId, loanId } = input;
 
-  return await prisma.document.create({
+   await prisma.document.create({
     data: {
       type,
       filepath,
@@ -44,7 +44,60 @@ export const documentService ={
       loanId,
     },
   });
+   //when pan uploaded 
+  if(type=="PAN"){
+    await prisma.loan.update({
+      where:{
+        id:input.loanId
+      },
+      data:{
+        kyc_step:KycStep.AADHAAR_PENDING
+      }
+    })
+  }
+
+  //when addhaar uploaded
+  if(type=="AADHAAR"){
+    await prisma.loan.update({
+      where:{
+        id:input.loanId
+      },
+      data:{
+        kyc_step:KycStep.SALARY_SLIP_PENDING
+      }
+    })
+  }
+  if(type=="SALARY_SLIP"){
+    await prisma.loan.update({
+      where:{
+        id:input.loanId
+      },
+      data:{
+        kyc_step:KycStep.KYC_COMPLETE
+      }
+    })
+  }
+
 },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
   async  generateSanctionLetter(

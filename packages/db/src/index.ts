@@ -8,3 +8,4 @@ const connectionString = `${process.env.DATABASE_URL}`
 
 const adapter = new PrismaPg({ connectionString })
 export const client = new PrismaClient({ adapter })
+export * from "@prisma/client";
